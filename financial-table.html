@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Records</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .table-container {
+            background: #2a2a72;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background: #00d4ff;
+        }
+
+        tr:hover {
+            background: #009fbf;
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            background: #ff4040;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #bf3030;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h2 style="text-align: center; color: #00d4ff;">Financial Records</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Expenditure</th>
+                    <th>Revenue</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="financial-table-body">
+                <!-- Data rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const financialData = [
+            { id: '1', expenditure: '$1000', revenue: '$3000' },
+            { id: '2', expenditure: '$500', revenue: '$2000' },
+            // Add mock data or fetch from a database
+        ];
+
+        const financialTableBody = document.getElementById('financial-table-body');
+
+        // Populate table
+        financialData.forEach((record, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${record.id}</td>
+                <td>${record.expenditure}</td>
+                <td>${record.revenue}</td>
+                <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>
+            `;
+            financialTableBody.appendChild(row);
+        });
+
+        // Delete row function
+        function deleteRow(index) {
+            financialData.splice(index, 1); // Remove from data array
+            financialTableBody.deleteRow(index); // Remove row from table
+        }
+    </script>
+</body>
+</html>

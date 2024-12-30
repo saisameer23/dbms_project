@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .dashboard {
+            display: flex;
+            gap: 20px;
+        }
+
+        .branch {
+            background: #00d4ff;
+            padding: 20px 40px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .branch:hover {
+            background: #009fbf;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <a href="branchalpha.html" class="branch">Alpha</a>
+
+        <a href="branchbeta.html" class="branch">Beta</a>
+
+    </div>
+</body>
+</html>

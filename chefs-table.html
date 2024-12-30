@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chefs Data</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .table-container {
+            background: #2a2a72;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background: #00d4ff;
+        }
+
+        tr:hover {
+            background: #009fbf;
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            background: #ff4040;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #bf3030;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h2 style="text-align: center; color: #00d4ff;">Chefs Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>SSN Number</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Join Date</th>
+                    <th>Salary</th>
+                    <th>Specialty Cuisine</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="chefs-table-body">
+                <!-- Data rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const chefsData = [
+            { ssn: '12345', first: 'John', middle: 'A', last: 'Doe', joinDate: '2023-01-01', salary: '50000', cuisine: 'Italian' },
+            // Add mock data or fetch from a database
+        ];
+
+        const tableBody = document.getElementById('chefs-table-body');
+
+        // Populate table
+        chefsData.forEach((chef, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${chef.ssn}</td>
+                <td>${chef.first}</td>
+                <td>${chef.middle}</td>
+                <td>${chef.last}</td>
+                <td>${chef.joinDate}</td>
+                <td>${chef.salary}</td>
+                <td>${chef.cuisine}</td>
+                <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Delete row function
+        function deleteRow(index) {
+            chefsData.splice(index, 1); // Remove from data array
+            tableBody.deleteRow(index); // Remove row from table
+        }
+    </script>
+</body>
+</html>

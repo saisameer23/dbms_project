@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            flex-direction: column;
+        }
+
+        .form-container {
+            background: #2a2a72;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 350px;
+            margin-bottom: 20px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00d4ff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f0f0f0;
+        }
+
+        .submit-btn, .view-btn, .delete-btn, .update-btn {
+            width: 100%;
+            padding: 10px;
+            background: #00d4ff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover, .view-btn:hover, .delete-btn:hover, .update-btn:hover {
+            background: #009fbf;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: #2a2a72;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dish Form Section -->
+    <div class="form-container">
+        <h2>Dish Details</h2>
+        <form id="dish-form">
+            <div class="form-group">
+                <label for="dish-id">Dish ID</label>
+                <input type="text" id="dish-id" placeholder="Enter Dish ID" required>
+            </div>
+            <div class="form-group">
+                <label for="dish-name">Dish Name</label>
+                <input type="text" id="dish-name" placeholder="Enter Dish Name" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" placeholder="Enter Price" required>
+            </div>
+            <div class="form-group">
+                <label for="size">Size</label>
+                <input type="text" id="size" placeholder="Enter Size" required>
+            </div>
+            <div class="form-group">
+                <label for="spice-type">Spice Type</label>
+                <input type="text" id="spice-type" placeholder="Enter Spice Type" required>
+            </div>
+            <div class="form-group">
+                <label for="region">Region of Origin</label>
+                <input type="text" id="region" placeholder="Enter Region" required>
+            </div>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <!-- View Dishes Section -->
+    <div class="form-container">
+        <h2>View Dishes</h2>
+        <table id="dishes-table">
+            <thead>
+                <tr>
+                    <th>Dish ID</th>
+                    <th>Dish Name</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Spice Type</th>
+                    <th>Region</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dishes will be displayed here -->
+            </tbody>
+        </table>
+        <button class="view-btn" onclick="fetchDishes()">View All Dishes</button>
+    </div>
+
+    <script>
+        // Handle form submission for adding a dish
+        document.getElementById('dish-form').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const dishId = document.getElementById('dish-id').value;
+            const dishName = document.getElementById('dish-name').value;
+            const price = document.getElementById('price').value;
+            const size = document.getElementById('size').value;
+            const spiceType = document.getElementById('spice-type').value;
+            const region = document.getElementById('region').value;
+
+            const dishData = {
+                dish_id: dishId,
+                dish_name: dishName,
+                price: price,
+                size: size,
+                spice_type: spiceType,
+                region_of_origin: region
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/menu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dishData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Dish added successfully!');
+                    document.getElementById('dish-form').reset();
+                    fetchDishes();  // Reload dishes list
+                } else {
+                    alert('Error adding dish: ' + result.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        // Fetch and display all dishes
+        async function fetchDishes() {
+            try {
+                const response = await fetch('http://localhost:5000/menu');
+                const dishes = await response.json();
+
+                const tableBody = document.querySelector('#dishes-table tbody');
+                tableBody.innerHTML = '';  // Clear existing data
+
+                dishes.forEach(dish => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${dish.dish_id}</td>
+                        <td>${dish.dish_name}</td>
+                        <td>${dish.price}</td>
+                        <td>${dish.size}</td>
+                        <td>${dish.spice_type}</td>
+                        <td>${dish.region_of_origin}</td>
+                        <td>
+                            <button class="update-btn" onclick="editDish(${dish.dish_id})">Edit</button>
+                            <button class="delete-btn" onclick="deleteDish(${dish.dish_id})">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                alert('Error fetching dishes: ' + error.message);
+            }
+        }
+
+        // Edit a dish
+        function editDish(dishId) {
+            // Fetch dish data and populate the form for editing
+            const row = document.querySelector(`#dishes-table tr[data-id="${dishId}"]`);
+            const dishName = row.querySelector('.dish-name').textContent;
+            const price = row.querySelector('.price').textContent;
+            const size = row.querySelector('.size').textContent;
+            const spiceType = row.querySelector('.spice-type').textContent;
+            const region = row.querySelector('.region').textContent;
+
+            document.getElementById('dish-id').value = dishId;
+            document.getElementById('dish-name').value = dishName;
+            document.getElementById('price').value = price;
+            document.getElementById('size').value = size;
+            document.getElementById('spice-type').value = spiceType;
+            document.getElementById('region').value = region;
+        }
+
+        // Delete a dish
+        async function deleteDish(dishId) {
+            const confirmDelete = confirm('Are you sure you want to delete this dish?');
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`http://localhost:5000/menu/${dishId}`, {
+                        method: 'DELETE'
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert('Dish deleted successfully!');
+                        fetchDishes();  // Reload dishes list
+                    } else {
+                        alert('Error deleting dish: ' + result.error);
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+        }
+
+        // Fetch dishes when the page loads
+        window.onload = fetchDishes;
+    </script>
+</body>
+</html>
